@@ -9,20 +9,20 @@
   @return $unit / ($unit * 0 + 1);
 } // end remove-unit
 
-// Is Property
-@function is-prop($property) {
+// Is Proportion
+@function _is-prop($proportion) {
   $is_prop: false;
   @each $prop in $default_proportions {
     $prop_name: nth($prop, 1);
-    @if $prop_name == $property { 
+    @if $prop_name == $proportion { 
       $is_prop: true; 
     }
   }
   @return $is_prop;
-} // end is-prop
+} // end _is-prop
 
 // Is Percentasge in props
-@function perc-in-props($perc) {
+@function _perc-in-props($perc) {
   $in_prop: false;
   @each $prop in $default_proportions {
     $prop_perc: nth($prop, 2);
@@ -34,7 +34,7 @@
 } // end perc-in-props
 
 // Get prop name from percentage
-@function get-prop-name($perc) {
+@function _get-prop-name($perc) {
   $name: null;
   @each $prop in $default_proportions {
     $prop_name: nth($prop, 1);
@@ -44,10 +44,10 @@
     }
   }
   @return $name;
-} // end get-prop-name
+} // end _get-prop-name
 
 // Make Columns
-@mixin make-cols($name) {
+@mixin _make-cols($name) {
   // Proportions
   @each $prop in $default_proportions {
     $prop_name: nth($prop, 1);
@@ -64,21 +64,21 @@
       // Lets extend the named proportion
       // if percentage matches to avoid
       // duplicate declarations
-      @if perc-in-props($perc) {
-        $prop_name: get-prop-name($perc);
+      @if _perc-in-props($perc) {
+        $prop_name: _get-prop-name($perc);
         @extend %prop-#{$name}-#{$prop_name};
       } @else {
          width: $perc; 
       }
     }
   }
-} // end make-cols
+} // end _make-cols
 
 // Set Column Span
-@mixin set-span($name, $span) {
+@mixin _set-span($name, $span) {
   @if type-of($span) == number {
     @extend %col-#{$name}-#{$span};
-  } @else if is-prop($span) {
+  } @else if _is-prop($span) {
     @extend %prop-#{$name}-#{$span};
   }
 } // end set-span
@@ -102,7 +102,7 @@ $default_breakpoints_len: length($default_breakpoints);
 }
 
 /*-- Small/Default --*/
-@include make-cols(default);
+@include _make-cols(default);
 
 @for $i from 1 through $default_breakpoints_len {
   // Cache the First
@@ -124,7 +124,7 @@ $default_breakpoints_len: length($default_breakpoints);
     }
     /*--- #{$name} and up ---*/
     @media screen and (min-width: ($prev_size) +'px') {
-      @include make-cols($name);
+      @include _make-cols($name);
     }
     
   }
@@ -164,7 +164,7 @@ $default_breakpoints_len: length($default_breakpoints);
         
         // If default, no media query needed
         @if $breakpoint_name == 'default' {
-          @include set-span($breakpoint_name, $breakpoint_span)
+          @include _set-span($breakpoint_name, $breakpoint_span)
         } @else {
           $prev: nth($default_breakpoints, $i - 1);
           $prev_size: nth($prev, 2);
@@ -175,7 +175,7 @@ $default_breakpoints_len: length($default_breakpoints);
             $prev_size: $prev_size + 1; 
           }
           @media screen and (min-width: ($prev_size) +'px') {
-            @include set-span($breakpoint_name, $breakpoint_span)
+            @include _set-span($breakpoint_name, $breakpoint_span)
           }
         
         } // end if
