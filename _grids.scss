@@ -1,0 +1,187 @@
+@include "./_base";
+
+////////////////////////////////////////////////////
+// Helpers
+////////////////////////////////////////////////////
+
+// Make Unitless
+@function remove-unit($unit) {
+  @return $unit / ($unit * 0 + 1);
+} // end remove-unit
+
+// Is Property
+@function is-prop($property) {
+  $is_prop: false;
+  @each $prop in $default_proportions {
+    $prop_name: nth($prop, 1);
+    @if $prop_name == $property { 
+      $is_prop: true; 
+    }
+  }
+  @return $is_prop;
+} // end is-prop
+
+// Is Percentasge in props
+@function perc-in-props($perc) {
+  $in_prop: false;
+  @each $prop in $default_proportions {
+    $prop_perc: nth($prop, 2);
+    @if round(remove-unit($prop_perc)) == round(remove-unit($perc)) {
+      $in_prop: true;
+    } 
+  }
+  @return $in_prop;
+} // end perc-in-props
+
+// Get prop name from percentage
+@function get-prop-name($perc) {
+  $name: null;
+  @each $prop in $default_proportions {
+    $prop_name: nth($prop, 1);
+    $prop_perc: nth($prop, 2);
+    @if round(remove-unit($prop_perc)) == round(remove-unit($perc)) {
+      $name: $prop_name;
+    }
+  }
+  @return $name;
+} // end get-prop-name
+
+// Make Columns
+@mixin make-cols($name) {
+  // Proportions
+  @each $prop in $default_proportions {
+    $prop_name: nth($prop, 1);
+    $prop_perc: nth($prop, 2);
+    %prop-#{$name}-#{$prop_name} { width: $prop_perc; }
+  }
+
+  // Columns
+  @for $i from 1 through $num_cols {
+    $perc: $base_perc * $i;
+    
+    %col-#{$name}-#{$i} {
+      
+      // Lets extend the named proportion
+      // if percentage matches to avoid
+      // duplicate declarations
+      @if perc-in-props($perc) {
+        $prop_name: get-prop-name($perc);
+        @extend %prop-#{$name}-#{$prop_name};
+      } @else {
+         width: $perc; 
+      }
+    }
+  }
+} // end make-cols
+
+// Set Column Span
+@mixin set-span($name, $span) {
+  @if type-of($span) == number {
+    @extend %col-#{$name}-#{$span};
+  } @else if is-prop($span) {
+    @extend %prop-#{$name}-#{$span};
+  }
+} // end set-span
+
+
+////////////////////////////////////////////////////
+// Grids
+////////////////////////////////////////////////////
+$default_breakpoints_len: length($default_breakpoints);
+
+.col {
+  display: inline-block;
+  *display: inline;
+  padding: 0 ($gutter/2)+px;
+  vertical-align: top;
+  width: 100%;
+  zoom: 1;
+}
+%col-collapse {
+  padding: 0;
+}
+
+/*-- Small/Default --*/
+@include make-cols(default);
+
+@for $i from 1 through $default_breakpoints_len {
+  // Cache the First
+  $prev: nth($default_breakpoints, $i);
+  $prev_size: nth($prev, 2);
+
+  // Skip the First
+  // it will act as our default
+  $j: $i+1;
+  @if $j <= $default_breakpoints_len {
+    $break: nth($default_breakpoints, $j);
+    $name:  nth($break, 1);
+    $size:  nth($break, 2);
+    
+    // Make sure if biggest breakpoint is set
+    // it applies as the media gets even wider
+    @if $j == $default_breakpoints_len {
+      $prev_size: $prev_size + 1; 
+    }
+    /*--- #{$name} and up ---*/
+    @media screen and (min-width: ($prev_size) +'px') {
+      @include make-cols($name);
+    }
+    
+  }
+}
+
+
+////////////////////////////////////////////////////
+// Set Columns
+//      
+//  .selector {
+//    @include set-cols(
+//        <name col-span>, 
+//        <name col-span>
+//    );
+//  }
+//  
+////////////////////////////////////////////////////
+@mixin set-cols($breakpoints...) {
+  
+  // Loop through our default breaks
+  @for $i from 1 through $default_breakpoints_len {
+    
+    // Cache the First
+    $break: nth($default_breakpoints, $i);
+    $name: unquote(nth($break, 1));
+    $size: nth($break, 2);
+    
+    // Loop through our breakpoints
+    @each $breakpoint in $breakpoints {
+
+      $breakpoints_len: length($breakpoints);
+      $breakpoint_name: unquote(nth($breakpoint, 1));
+      $breakpoint_span: nth($breakpoint, 2);
+      
+      // check if breakpoint exists in defaults
+      @if $breakpoint_name == $name {
+        
+        // If default, no media query needed
+        @if $breakpoint_name == 'default' {
+          @include set-span($breakpoint_name, $breakpoint_span)
+        } @else {
+          $prev: nth($default_breakpoints, $i - 1);
+          $prev_size: nth($prev, 2);
+
+          // Make sure if biggest breakpoint is set
+          // it applies as the media gets even wider
+          @if $i == $default_breakpoints_len {
+            $prev_size: $prev_size + 1; 
+          }
+          @media screen and (min-width: ($prev_size) +'px') {
+            @include set-span($breakpoint_name, $breakpoint_span)
+          }
+        
+        } // end if
+      } // end if
+    } // end each
+  
+  } // end for
+
+} // end new-set-cols
