@@ -136,8 +136,8 @@ $default_breakpoints_len: length($default_breakpoints);
 //      
 //  .selector {
 //    @include set-vapors(
-//        <name col-span>, 
-//        <name col-span>
+//        <name> <col-span>, 
+//        <name> <col-span>
 //    );
 //  }
 //  
