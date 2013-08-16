@@ -13,8 +13,8 @@ bower install vapors
 ```
  .selector {
   @include set-vapors(
-      <name> <col-span>, 
-      <name> <col-span>
+      <breakpoint-name> <col-span>, 
+      <breakpoint-name> <col-span>
   );
 }
 ``` 
