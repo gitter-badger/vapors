@@ -132,17 +132,17 @@ $default_breakpoints_len: length($default_breakpoints);
 
 
 ////////////////////////////////////////////////////
-// Set Columns
+// Set Vapors Columns
 //      
 //  .selector {
-//    @include set-cols(
+//    @include set-vapors(
 //        <name col-span>, 
 //        <name col-span>
 //    );
 //  }
 //  
 ////////////////////////////////////////////////////
-@mixin set-cols($breakpoints...) {
+@mixin set-vapors($breakpoints...) {
   
   // Loop through our default breaks
   @for $i from 1 through $default_breakpoints_len {
@@ -184,4 +184,4 @@ $default_breakpoints_len: length($default_breakpoints);
   
   } // end for
 
-} // end new-set-cols
+} // end new-set-vapors
