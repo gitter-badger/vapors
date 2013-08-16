@@ -4,24 +4,24 @@
 // Helpers
 ////////////////////////////////////////////////////
 
-// Make Unitless
+// Removes unit from value
 @function remove-unit($unit) {
   @return $unit / ($unit * 0 + 1);
 } // end remove-unit
 
-// Is Proportion
-@function _is-prop($proportion) {
+// Is name in proportions
+@function _is-prop($name) {
   $is_prop: false;
   @each $prop in $default_proportions {
     $prop_name: nth($prop, 1);
-    @if $prop_name == $proportion { 
+    @if $prop_name == $name { 
       $is_prop: true; 
     }
   }
   @return $is_prop;
 } // end _is-prop
 
-// Is Percentasge in props
+// Is percentage in proportions
 @function _perc-in-props($perc) {
   $in_prop: false;
   @each $prop in $default_proportions {
@@ -33,7 +33,7 @@
   @return $in_prop;
 } // end perc-in-props
 
-// Get prop name from percentage
+// Get proportion name by percentage
 @function _get-prop-name($perc) {
   $name: null;
   @each $prop in $default_proportions {
