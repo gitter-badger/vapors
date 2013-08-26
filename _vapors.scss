@@ -123,7 +123,7 @@ $default_breakpoints_len: length($default_breakpoints);
       $prev_size: $prev_size + 1; 
     }
     /*--- #{$name} and up ---*/
-    @media screen and (min-width: ($prev_size) +'px') {
+    @media screen and (min-width: ($prev_size + 1) +'px') {
       @include _make-cols($name);
     }
     
@@ -174,7 +174,7 @@ $default_breakpoints_len: length($default_breakpoints);
           @if $i == $default_breakpoints_len {
             $prev_size: $prev_size + 1; 
           }
-          @media screen and (min-width: ($prev_size) +'px') {
+          @media screen and (min-width: ($prev_size + 1) +'px') {
             @include _set-span($breakpoint_name, $breakpoint_span)
           }
         
