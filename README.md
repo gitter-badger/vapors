@@ -31,9 +31,15 @@ Vapors depends on `inline-block` and expects the user to be aware of the whitesp
 	</div>
 </div>
 ```
+
 ## Usage
 ```
- .selector.col {
+  <div class="selector col">
+  </div>
+```
+
+```
+ .selector {
   @include set-vapors(
       <breakpoint-name> <col-span>, 
       <breakpoint-name> <col-span>
