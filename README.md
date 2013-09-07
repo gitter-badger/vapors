@@ -33,11 +33,14 @@ Vapors depends on `inline-block` and expects the user to be aware of the whitesp
 ```
 
 ## Usage
+
+### In Markup
 ```
   <div class="selector col">
   </div>
 ```
 
+### In SCSS
 ```
  .selector {
   @include set-vapors(
