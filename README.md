@@ -7,11 +7,33 @@ An unobtrusive, markup agnostic, responsive grid utility for SASS projects.
 ```
 bower install vapors
 ``` 
+## Disclaimer 
+Vapors depends on `inline-block` and expects the user to be aware of the whitespace quirks in their markup.
 
-## Usage
-
+### Wrong
 ```
- .selector {
+<div class='wrap'>
+	<div class="col">
+		
+	</div>
+	<div class="col">
+
+	</div>
+</div>
+```
+### Right
+```
+<div class='wrap'>
+	<div class="col">
+		
+	</div><div class="col">
+
+	</div>
+</div>
+```
+## Usage
+```
+ .selector.col {
   @include set-vapors(
       <breakpoint-name> <col-span>, 
       <breakpoint-name> <col-span>
