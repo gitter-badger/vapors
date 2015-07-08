@@ -1,4 +1,6 @@
 # Vapors
+
+[![Join the chat at https://gitter.im/ptouch718/vapors](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ptouch718/vapors?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 An unobtrusive, markup agnostic, responsive grid utility for SASS projects.
 
 ## Installation
